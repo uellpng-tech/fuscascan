@@ -1,5 +1,7 @@
-from tkinter import *
 import tkinter as tk
+import random
+import time
+from tkinter import *
 from tkinter import ttk, filedialog
 from PIL import ImageTk, Image
 from processamento import analisar, pre_processimg
@@ -13,7 +15,11 @@ def iniciar_interface():
     root.maxsize(450, 550)
 
     caixa = tk.Frame(root, bg="#AFAFAF")
-    caixa.place(x=80, y=75, relwidth=0.65, relheight=0.55)
+    caixa.place(x=80, y=50, relwidth=0.65, relheight=0.61)
+
+    cerebroc = PhotoImage(file="assets/cerebro0.png")
+    cerebro = tk.Label(root, image=cerebroc, bg="#AFAFAF")
+    cerebro.place(x=325, y=50)
 
     def limpar_img():
         global btn_select, img_btnc
@@ -29,17 +35,21 @@ def iniciar_interface():
     def carrega_img():
         global img_cam, img
 
-        cam = Image.open(filedialog.askopenfilename(title="Selecione uma imagem para analise", filetypes=[("image files", "*.png"), ("image files", "*.jpg"),("image files", "*.jpeg"), ("Todos os arquivos", "*.*")]))
+        caminho = filedialog.askopenfilename(title="Selecione uma imagem para analise", filetypes=[("image files", "*.png"), ("image files", "*.jpg"),("image files", "*.jpeg"), ("Todos os arquivos", "*.*")])
+        cam = Image.open(caminho)
         redimen = cam.resize((270, 275))
         img_cam = ImageTk.PhotoImage(redimen)
         img = tk.Label(root, image=img_cam, cursor="hand2")
         img.place(x=91.5, y=90, relwidth=0.6, relheight=0.5)
 
         btn_edit['state'] = 'active'
+
         btn_analisar['state'] = 'active'
+        btn_analisar['command'] = analisar
+
         btn_limpar['state'] = 'active'
 
-        pre_processimg(cam)
+        pre_processimg(caminho)
 
 
     img_btnc = PhotoImage(file="assets/add_btn.png")
